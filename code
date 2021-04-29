@@ -1,0 +1,55 @@
+-> High-availability failover is available with either automatic client failover, or application-level failover, through a live-backup structure.
+   Each live server has a backup server, which can also be backed up by as many servers as necessary.
+
+-> The backup server only takes over if the live server crashes and there is a failover. Simulteneously, one of the secondary backup servers takes over
+	as the passive backup server, from the new live server. After the failover, and after the former live server has been restarted, 
+	it becomes a secondary backup server, or the backup server if there are only two.
+
+
+-> Clustering should be enabled even if you are not using the clustering capabilities. This is because each node of the HA cluster must have 
+	a cluster-connection to all of the other nodes, in order to negotiate roles with the other servers.
+
+-> A shared file-system-directory is required, in order for the backup server to send/receive messages as a response to the messages received 
+	by the previous live server.
+	
+-> 
+
+
+Cluster : set of server instances using a common communication channel to improve services availability by providing failover, fault-tolerance and 
+scalability capabilities.
+
+Start the JBoss EAP 7 cluster
+To start the cluster is as simple as starting the standalone version, since Ansible helped us configure everything all we need to do is to go to the $JBOSS_HOME/bin and execute domain.sh instead of standalone.sh
+
+$ cd ~/jboss-eap-7.0/bin
+$ sh domain.sh
+
+
+----> High availability
+To test the high availability we can suspend the server that our session is connected to. In this step we will use backend-server1, but please you should use the same server that where listed in Step 4.
+
+To suspend the server follow the below steps
+
+Open another tab to the admin console (http://localhost:9990)
+
+Login with username admin and password admin-123
+
+Click on Runtime tab
+
+Browse Domain by Server Groups → backend-servers → backend1
+
+Select Suspend from the drop down menu next to backend1
+
+
+Click on Suspend Server
+
+
+Reload the other firefox tab with the clustering-demo application
+
+If everything worked correctly the backend server should now change and the counter should continue from and not restart.
+
+<--------------
+
+
+Load-balancing and clustering are often mixed-up. Load-balancing is just about dispatching the load between different nodes. 
+Clustering focuses on replicating state between nodes to guarantee failover.
